@@ -23,3 +23,4 @@ module.exports = router
 
     //accounts
     .post('/register', Accounts.post)
+    .post('/login', Accounts.auth)

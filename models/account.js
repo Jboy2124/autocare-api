@@ -6,7 +6,8 @@ module.exports = {
 
     async list() {
         try {
-            
+            const result = await knex('account')
+                .select('*')
 
         } catch (error) {
             console.log(error)
@@ -15,8 +16,32 @@ module.exports = {
     }, 
 
     async find(payload) {
+        const { email, password } = payload
+        let response = ''
         try {
-            
+            const result = await knex('account')
+                .select({
+                    adv_id: 'adv_id',
+                    firstname: 'firstname',
+                    lastname: 'lastname',
+                    password: 'password'
+                })
+                .where('email', email)           
+
+            if(result.length > 0) {
+                const isMatch = await HashPassword.verify(password, result[0].password)
+
+                if(isMatch){
+                    response = ({ response: 'Success' })
+                } else {
+                    response = ({ response: 'Invalid Password' })
+                }
+            } else {
+                response = ({ response: 'Invalid Username' })
+            }
+
+            return response
+
         } catch (error) {
             console.log(error)
             throw error
@@ -27,7 +52,7 @@ module.exports = {
         const { fname, lname, email, password } = payload
 
         try {
-            const [id] = await knex('login_account')
+            const [id] = await knex('account')
                 .insert({
                     firstname: fname,
                     lastname: lname,
