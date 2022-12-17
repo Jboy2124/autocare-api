@@ -24,6 +24,7 @@ module.exports = {
                     adv_id: 'adv_id',
                     firstname: 'firstname',
                     lastname: 'lastname',
+                    email: 'email',
                     password: 'password'
                 })
                 .where('email', email)           
@@ -32,7 +33,7 @@ module.exports = {
                 const isMatch = await HashPassword.verify(password, result[0].password)
 
                 if(isMatch){
-                    response = ({ response: 'Success' })
+                    response = ({ response: 'Success', result: result })
                 } else {
                     response = ({ response: 'Invalid Password' })
                 }
